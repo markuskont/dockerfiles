@@ -18,4 +18,4 @@ You can build and run containers manually if you want, but [see shared volume cr
 
 ## HTTPS
 
-Images are for internal usage, so this is not handled by dockerfiles. Users should customize [nginx config](proxy/nginx.conf) on proxy should htis be a requirement.
+Images are for internal usage, so this is not handled by dockerfiles. Users should customize [nginx config](proxy/nginx.conf) on proxy should this be a requirement.
