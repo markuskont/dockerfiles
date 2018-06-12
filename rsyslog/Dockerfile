@@ -1,13 +1,17 @@
 FROM debian:stretch
 
-RUN apt-get update && apt-get install -qq -y git build-essential autogen autoconf libtool pkg-config checkinstall python-docutils flex bison libgrok1 librdkafka1 libestr-dev zlib1g-dev uuid-dev libsystemd-dev libgcrypt20-dev liblogging-stdlog-dev libcurl4-gnutls-dev librdkafka-dev libgrok-dev libpcre3-dev libtokyocabinet-dev libglib2.0-dev gnutls-dev libestr-dev && apt-get -y autoremove && apt-get -y autoclean && apt-get clean
+RUN apt-get update && apt-get install -qq -y git build-essential autogen autoconf libtool pkg-config python-docutils flex bison libgrok1 librdkafka1 libestr-dev zlib1g-dev uuid-dev libsystemd-dev libgcrypt20-dev liblogging-stdlog-dev libcurl4-gnutls-dev librdkafka-dev libgrok-dev libpcre3-dev libtokyocabinet-dev libglib2.0-dev gnutls-dev libestr-dev && apt-get -y autoremove && apt-get -y autoclean && apt-get clean
 
 ENV INSTALL_PATH /src
+ENV RSYSLOG 8.35.0
+ENV LIBFASTJSON 0.99.8
+ENV LIBLOGNORM 2.0.4
+
 RUN mkdir -p $INSTALL_PATH
 
 RUN git clone https://github.com/rsyslog/libfastjson.git \
 && cd libfastjson \
-&& git checkout tags/v0.99.8 \
+&& git checkout tags/v$LIBFASTJSON \
 && sh autogen.sh \
 && ./configure \
 && make \
@@ -16,7 +20,7 @@ RUN git clone https://github.com/rsyslog/libfastjson.git \
 
 RUN git clone https://github.com/rsyslog/liblognorm.git \
 && cd liblognorm \
-&& git checkout tags/v2.0.4 \
+&& git checkout tags/v$LIBLOGNORM \
 && autoreconf --install \
 && ./configure \
 && make \
@@ -26,7 +30,7 @@ RUN git clone https://github.com/rsyslog/liblognorm.git \
 WORKDIR $INSTALL_PATH
 RUN git clone https://github.com/rsyslog/rsyslog/ \
 && cd rsyslog \
-&& git checkout tags/v8.35.0 \
+&& git checkout tags/v$RSYSLOG \
 && ./autogen.sh \
 && ./configure \
 --prefix=/opt/rsyslog \
