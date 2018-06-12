@@ -21,7 +21,6 @@ COPY uwsgi.ini ${appdir}/uwsgi.ini
 COPY alertad.conf ${ALERTA_SRV_CONF_FILE}
 
 RUN addgroup -gid ${GID} alerta && adduser -uid ${UID} -gid ${GID} --shell /bin/sh --disabled-login alerta
-#USER alerta
+USER alerta
 
-VOLUME /tmp/alerta/
 CMD chown ${GID}:${UID} /tmp/alerta && uwsgi --ini ${appdir}/uwsgi.ini
