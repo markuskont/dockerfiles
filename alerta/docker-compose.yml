@@ -1,0 +1,39 @@
+version: '3.6'
+
+services:
+
+  alerta-database:
+    image: mongo:latest
+    networks:
+      alertanet: {}
+
+  alerta-api:
+    build:  api/
+    image:  markuskont/alerta-api
+    environment:
+      DATABASE_URL: "mongodb://alerta-database:27017/monitoring"
+    networks:
+      alertanet: {}
+    volumes:
+      - alerta-wsgi-socket:/tmp/alerta
+    depends_on:
+      - alerta-database
+
+  alerta-proxy:
+    build: proxy/
+    image: markuskont/alerta-proxy
+    ports:
+      - "0.0.0.0:8080:80"
+    networks:
+      alertanet: {}
+    volumes:
+      - alerta-wsgi-socket:/tmp/alerta
+    depends_on:
+      - alerta-database
+      - alerta-api
+
+volumes:
+  alerta-wsgi-socket:
+
+networks:
+  alertanet:
