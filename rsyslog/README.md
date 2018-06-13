@@ -8,7 +8,7 @@ This dockerfile builds rsyslog log server with features that I like. Users are a
 ## Getting started
 
 ```
-docker build -t markuskont/rsyslog
+docker build -t markuskont/rsyslog .
 ```
 
 ```
