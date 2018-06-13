@@ -1,7 +1,9 @@
 FROM debian:stretch
+LABEL maintainer="Markus Kont <alias013@gmail.com>"
 
 RUN apt-get update && apt-get install -qq -y git build-essential autogen autoconf libtool pkg-config python-docutils flex bison libgrok1 librdkafka1 libestr-dev zlib1g-dev uuid-dev libsystemd-dev libgcrypt20-dev liblogging-stdlog-dev libcurl4-gnutls-dev librdkafka-dev libgrok-dev libpcre3-dev libtokyocabinet-dev libglib2.0-dev gnutls-dev libestr-dev && apt-get -y autoremove && apt-get -y autoclean && apt-get clean
 
+ENV DEBIAN_FRONTEND=noninteractive
 ENV INSTALL_PATH /src
 ENV RSYSLOG 8.35.0
 ENV LIBFASTJSON 0.99.8

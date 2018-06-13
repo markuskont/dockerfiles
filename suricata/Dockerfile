@@ -1,5 +1,7 @@
 FROM ubuntu:xenial
+LABEL maintainer="Markus Kont <alias013@gmail.com>"
 
+ENV DEBIAN_FRONTEND=noninteractive
 ENV INSTALL_PATH /src
 #ENV SURICATA suricata-4.0.4
 ENV SURICATA 325f336f637f8a3f4f2fb00c6cd6d0f04d5ca62f
