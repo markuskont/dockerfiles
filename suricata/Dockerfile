@@ -6,6 +6,7 @@ ENV INSTALL_PATH /src
 #ENV SURICATA suricata-4.0.4
 ENV SURICATA 325f336f637f8a3f4f2fb00c6cd6d0f04d5ca62f
 ENV LIBHTP  0.5.26
+ENV HYPERSCAN 4.7.0
 
 RUN mkdir -p $INSTALL_PATH
 
@@ -24,6 +25,8 @@ curl \
 sudo \
 rustc \
 cargo \
+cmake \
+ragel \
 && apt-get -y autoremove && apt-get -y autoclean && apt-get clean
 
 # execute unknown script from web as root, what could possibly go wrong
@@ -31,6 +34,7 @@ cargo \
 
 RUN apt-get update \
 && apt-get -qq -y install \
+libboost-all-dev \
 libpcre3 \
 libpcre3-dbg \
 libpcre3-dev \
@@ -49,6 +53,11 @@ libhiredis-dev \
 libluajit-5.1-dev \
 liblz4-dev \
 && apt-get -y autoremove && apt-get -y autoclean && apt-get clean
+
+RUN git clone https://github.com/intel/hyperscan \
+&& cd hyperscan \
+&& git checkout tags/v$HYPERSCAN . \
+&& cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_STATIC_AND_SHARED=1 && make && make install && cd ../ && rm -r hyperscan
 
 RUN git clone https://github.com/OISF/suricata \
 && cd suricata \
