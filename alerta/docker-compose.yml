@@ -15,7 +15,7 @@ services:
     networks:
       alertanet: {}
     volumes:
-      - alerta-wsgi-socket:/tmp/alerta
+      - alerta-wsgi-socket:/var/alerta/run
     depends_on:
       - alerta-database
 
@@ -27,7 +27,7 @@ services:
     networks:
       alertanet: {}
     volumes:
-      - alerta-wsgi-socket:/tmp/alerta
+      - alerta-wsgi-socket:/var/alerta/run
     depends_on:
       - alerta-database
       - alerta-api
