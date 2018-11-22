@@ -56,4 +56,4 @@ RUN mkdir /var/run/rsyslog && mkdir /var/spool/rsyslog && mkdir /etc/rsyslog.d #
 COPY rsyslog.conf /etc/rsyslog.conf
 COPY 001-default.conf /etc/rsyslog.d/001-default.conf
 
-ENTRYPOINT ["/opt/rsyslog/sbin/rsyslogd", "-n"]
+ENTRYPOINT ["rsyslogd", "-n"]
