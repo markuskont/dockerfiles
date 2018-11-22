@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV INSTALL_PATH /src
 ENV RSYSLOG 8.39.0
 ENV LIBFASTJSON 0.99.8
-ENV LIBLOGNORM 2.0.5
+ENV LIBLOGNORM 2.0.6
 
 RUN mkdir -p $INSTALL_PATH
 
@@ -35,7 +35,7 @@ RUN git clone https://github.com/rsyslog/rsyslog/ \
 && git checkout tags/v$RSYSLOG \
 && ./autogen.sh \
 && ./configure \
---prefix=/opt/rsyslog \
+#--prefix=/opt/rsyslog \
 --enable-elasticsearch \
 --enable-imkafka \
 --enable-imjournal \
@@ -51,7 +51,7 @@ RUN git clone https://github.com/rsyslog/rsyslog/ \
 && make && make install \
 && cd ../ && rm -r rsyslog
 
-RUN mkdir /var/run/rsyslog && mkdir /var/spool/rsyslog && mkdir /etc/rsyslog.d && rm -r /var/log/syslog*
+RUN mkdir /var/run/rsyslog && mkdir /var/spool/rsyslog && mkdir /etc/rsyslog.d #&& rm -r /var/log/syslog*
 
 COPY rsyslog.conf /etc/rsyslog.conf
 COPY 001-default.conf /etc/rsyslog.d/001-default.conf
