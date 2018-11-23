@@ -35,7 +35,6 @@ RUN git clone https://github.com/rsyslog/rsyslog/ \
 && git checkout tags/v$RSYSLOG \
 && ./autogen.sh \
 && ./configure \
-#--prefix=/opt/rsyslog \
 --enable-elasticsearch \
 --enable-imkafka \
 --enable-imjournal \
@@ -48,8 +47,12 @@ RUN git clone https://github.com/rsyslog/rsyslog/ \
 --enable-omuxsock \
 --enable-mmanon \
 --enable-mmfields \
+&& mkdir -p /usr/lib/rsyslog \
 && make && make install \
+&& echo /usr/lib/rsyslog > /etc/ld.so.conf.d/rsyslog.conf \
+&& ldconfig \
 && cd ../ && rm -r rsyslog
+
 
 RUN mkdir /var/run/rsyslog && mkdir /var/spool/rsyslog && mkdir /etc/rsyslog.d #&& rm -r /var/log/syslog*
 
