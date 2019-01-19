@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM python:3.7
 LABEL maintainer="Markus Kont <alias013@gmail.com>"
 
 ENV PYTHONUNBUFFERED 1
@@ -16,4 +16,4 @@ COPY wsgi.py /var/alerta/wsgi.py
 COPY uwsgi.ini /etc/uwsgi.ini
 COPY alertad.conf /etc/alertad.conf
 
-CMD chown alerta /var/alerta/run && uwsgi --ini /etc/uwsgi.ini
+CMD chown -R alerta /var/alerta/ && uwsgi --ini /etc/uwsgi.ini
