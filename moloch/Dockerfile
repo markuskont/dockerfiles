@@ -35,3 +35,6 @@ ENV PATH "$PATH:/data/moloch/bin"
 COPY --from=Builder /data /data
 RUN mkdir /data/moloch/raw && chown nobody /data/moloch/raw
 WORKDIR /data/moloch
+
+COPY entrypoint.sh  /data/moloch/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
