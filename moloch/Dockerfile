@@ -33,4 +33,5 @@ RUN apt-get update && apt-get -y install wget curl libpcre3-dev uuid-dev libmagi
 
 ENV PATH "$PATH:/data/moloch/bin"
 COPY --from=Builder /data /data
+RUN mkdir /data/moloch/raw && chown nobody /data/moloch/raw
 WORKDIR /data/moloch
