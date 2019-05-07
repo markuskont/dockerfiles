@@ -15,5 +15,13 @@ docker build -t markuskont/suricata .
 Suricata binary is already defined as entrypoint. Thus, suricata cli flags can be invoked directly as container args.
 
 ```
-docker run --rm -ti -v $PWD:/srv markuskont/suricata -V
+docker run --rm -ti markuskont/suricata -V
 ```
+
+Online `af-packet` capture works if in conjuction with `--network host` and `--privileged` flag. Former gives direct access to host interfaces while the latter avoids ioctl permission errors.
+
+```
+docker run --rm -ti --name meerkat --network host -v docker-volumes:/var/log/suricata:rw --privileged markuskont/suricata -c /etc/suricata/suricata.yaml --af-packet=enp37s0
+```
+
+Insecure as hell, but I only care about containing the dependencies. IDS world is already about as privileged as it gets.
