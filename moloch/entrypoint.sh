@@ -28,6 +28,9 @@ case ${MOLOCH_ENV} in
       if [[ -n "${MOLOCH_PACKET_THREADS}" ]]; then
         sed -i -e "s/packetThreads=2/packetThreads=${MOLOCH_PACKET_THREADS}/g" $CONFIG
       fi
+      if [[ -n "${MOLOCH_INCLUDES}" ]]; then
+        sed -i -e "s,#includes=,includes=${MOLOCH_INCLUDES},g" $CONFIG || exit 1
+      fi
       sed -i "s/MOLOCH_ELASTICSEARCH/${MOLOCH_ELASTICSEARCH}/g" $CONFIG
       sed -i "s/MOLOCH_INTERFACE/${MOLOCH_INTERFACE}/g"         $CONFIG
       sed -i "s/MOLOCH_PASSWORD/${MOLOCH_PASSWORD}/g"           $CONFIG
