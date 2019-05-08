@@ -68,8 +68,23 @@ docker run -ti --rm \
   -e "MOLOCH_PACKET_THREADS=16" \
   -e "MOLOCH_INCLUDES=/tmp/override.ini" \
   -v /srv/pcap/:/srv/pcap:ro \
-  -v /home/markus/Projects/override.ini:/tmp/override.ini:ro \
+  -v /home/user/Projects/override.ini:/tmp/override.ini:ro \
   markuskont/moloch-capture -R /srv/pcap --monitor --recursive
 ```
 
 `-h` parameter is important for capture, as this will derive the moloch `node` field that must also match in viewer. Otherwise, pcap session load from disk will break, even if the host folder is correctly mounted for viewer image.
+
+```
+docker run -ti --rm \
+  --name moloch-docker-viewer \
+  --network moloch \
+  -e "MOLOCH_WISE_HOST=moloch-docker-wise" \
+  -e "MOLOCH_ADMIN_USER=admin" \
+  -e "MOLOCH_ADMIN_PASS=stronk" \
+  -e "MOLOCH_ELASTICSEARCH=moloch-elastic:9200" \
+  -e "MOLOCH_INCLUDES=/tmp/override.ini" \
+  -v /srv/pcap:/srv/pcap:ro \
+  -v /home/user/Projects/override.ini:/tmp/override.ini:ro \
+  -p 8005:8005 \
+  markuskont/moloch-viewer --host moloch-docker-capture
+```

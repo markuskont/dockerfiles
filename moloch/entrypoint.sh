@@ -56,7 +56,10 @@ case ${MOLOCH_ENV} in
     ;;
   "VIEWER" )
     MOLOCH_ELASTICSEARCH=$(echo ${MOLOCH_ELASTICSEARCH} | cut -d "," -f1)
-    curl -ss $MOLOCH_ELASTICSEARCH || echo "unable to connect to elastic ${MOLOCH_ELASTICSEARCH}" ; exit 1
+    if [[ -z $(curl -ss $MOLOCH_ELASTICSEARCH/_cat/health) ]]; then 
+      echo "unable to connect to elastic ${MOLOCH_ELASTICSEARCH}" 
+      exit 1
+    fi
     if [[ `./db/db.pl ${MOLOCH_ELASTICSEARCH} info | grep "DB Version" | cut -d ":" -f2 | tr -d " "` -eq -1 ]]; then
       echo "elastic connection to ${MOLOCH_ELASTICSEARCH} OK, but database is missing. Please create."
       exit 1
@@ -67,7 +70,7 @@ case ${MOLOCH_ENV} in
       fi
       ../bin/node addUser.js -c $CONFIG ${MOLOCH_ADMIN_USER} ${MOLOCH_ADMIN_USER} ${MOLOCH_ADMIN_PASS} --admin
     fi
-    ../bin/node viewer.js -c $CONFIG
+    ../bin/node viewer.js -c $CONFIG $@
     ;;
   *)
     echo "MOLOCH_ENV undefined"
