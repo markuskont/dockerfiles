@@ -25,6 +25,10 @@ RUN cd moloch \
 
 WORKDIR /data/moloch/bin
 RUN ./moloch_update_geo.sh
+WORKDIR /data/moloch/wiseService
+
+RUN ../bin/npm install bloomfilter
+RUN ../bin/npm install hashtable
 
 FROM ubuntu:bionic
 
@@ -33,8 +37,9 @@ RUN apt-get update && apt-get -y install wget curl libpcre3-dev uuid-dev libmagi
 
 ENV PATH "$PATH:/data/moloch/bin"
 COPY --from=Builder /data /data
-RUN mkdir /data/moloch/raw && chown nobody /data/moloch/raw
 WORKDIR /data/moloch
+RUN useradd -ms /bin/bash moloch && usermod -d /data/moloch -u 1000 moloch && chown -R moloch /data/moloch
+RUN mkdir /data/moloch/raw && chown nobody /data/moloch/raw
 
 COPY entrypoint.sh  /data/moloch/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
