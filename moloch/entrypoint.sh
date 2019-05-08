@@ -12,7 +12,7 @@ case ${MOLOCH_ENV} in
     CONFIG=/data/moloch/etc/config.ini
     if [[ ! -f $CONFIG ]]; then
       cp $CONFIG.sample $CONFIG
-      sed -i "s/MOLOCH_INSTALL_DIR/\/data\/moloch/g"    $CONFIG
+      sed -i "s,MOLOCH_INSTALL_DIR,/data/moloch,g"  $CONFIG
       if [[ -z "${MOLOCH_ELASTICSEARCH}" ]]; then
         MOLOCH_ELASTICSEARCH="moloch-elastic:9200"
       fi
