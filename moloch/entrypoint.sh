@@ -41,6 +41,11 @@ case ${MOLOCH_ENV} in
     ;;
 esac
 
+if [ ${MOLOCH_PRINT_CONFIG} = true ]; then
+  cat $CONFIG
+  exit 1
+fi
+
 case ${MOLOCH_ENV} in
   "WISE" )
     ../bin/node wiseService.js -c $CONFIG
