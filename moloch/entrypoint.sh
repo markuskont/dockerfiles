@@ -41,7 +41,7 @@ case ${MOLOCH_ENV} in
     ;;
 esac
 
-if [ ${MOLOCH_PRINT_CONFIG} = true ]; then
+if [ ${MOLOCH_PRINT_CONFIG} ]; then
   cat $CONFIG
   exit 1
 fi
@@ -59,7 +59,7 @@ case ${MOLOCH_ENV} in
     if [[ `./db/db.pl ${MOLOCH_ELASTICSEARCH} info | grep "DB Version" | cut -d ":" -f2 | tr -d " "` -eq -1 ]]; then
       echo "INIT" | ./db/db.pl ${MOLOCH_ELASTICSEARCH} init
     fi
-    ethtool -K ${MOLOCH_INTERFACE} tx off sg off gro off gso off lro off tso off
+    #ethtool -K ${MOLOCH_INTERFACE} tx off sg off gro off gso off lro off tso off
     moloch-capture -c $CONFIG $@
     ;;
   "VIEWER" )
