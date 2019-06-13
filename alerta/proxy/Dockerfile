@@ -3,7 +3,7 @@ LABEL maintainer="Markus Kont <alias013@gmail.com>"
 
 RUN apk --update add git \
 && git clone https://github.com/alerta/angular-alerta-webui.git /tmp/alerta \
-&& cd /tmp/alerta && git checkout tags/v6.4.0 \
+&& cd /tmp/alerta && git checkout tags/v6.8.5 \
 && mv /tmp/alerta/app /var/www \
 && rm -r /tmp/alerta
 
