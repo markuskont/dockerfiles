@@ -33,7 +33,7 @@ RUN ../bin/npm install hashtable
 FROM ubuntu:bionic
 
 USER root
-RUN apt-get update && apt-get -y install wget curl libpcre3-dev uuid-dev libmagic-dev zlib1g-dev libffi-dev libgeoip-dev libjson-perl libbz2-dev libwww-perl libpng-dev xz-utils libffi-dev libssl-dev libreadline-dev libyaml-dev libsocket6-perl libtest-differences-perl && apt-get -y autoremove && apt-get autoclean && apt-get clean
+RUN apt-get update && apt-get -y install wget curl libpcre3-dev uuid-dev libmagic-dev zlib1g-dev libffi-dev libgeoip-dev libjson-perl libbz2-dev libwww-perl openssl libpng-dev xz-utils libffi-dev libssl-dev libreadline-dev libyaml-dev libsocket6-perl libtest-differences-perl && apt-get -y autoremove && apt-get autoclean && apt-get clean
 
 ENV PATH "$PATH:/data/moloch/bin"
 COPY --from=Builder /data /data

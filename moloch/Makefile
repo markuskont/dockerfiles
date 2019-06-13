@@ -1,11 +1,16 @@
+build-full :
+	docker build --no-cache -t markuskont/moloch:latest ./
+	docker build --no-cache -t markuskont/moloch-capture:latest ./capture
+	docker build --no-cache -t markuskont/moloch-viewer:latest ./viewer
+	docker build --no-cache -t markuskont/moloch-wise:latest ./wise
 build :
-	sudo docker build -t markuskont/moloch ./
-	sudo docker build -t markuskont/moloch-capture ./capture
-	sudo docker build -t markuskont/moloch-viewer ./viewer
-	sudo docker build -t markuskont/moloch-wise ./wise
+	docker build -t markuskont/moloch:latest ./
+	docker build -t markuskont/moloch-capture:latest ./capture
+	docker build -t markuskont/moloch-viewer:latest ./viewer
+	docker build -t markuskont/moloch-wise:latest ./wise
 clean :
-	sudo docker system prune -f
-	sudo docker image rm markuskont/moloch-capture
-	sudo docker image rm markuskont/moloch-wise
-	sudo docker image rm markuskont/moloch-viewer
-	sudo docker image rm markuskont/moloch
+	docker system prune -f
+	docker image rm markuskont/moloch-capture:latest
+	docker image rm markuskont/moloch-wise:latest
+	docker image rm markuskont/moloch-viewer:latest
+	docker image rm markuskont/moloch:latest

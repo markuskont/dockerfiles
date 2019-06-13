@@ -68,7 +68,7 @@ case ${MOLOCH_ENV} in
       echo "unable to connect to elastic ${MOLOCH_ELASTICSEARCH}" 
       exit 1
     fi
-    if [[ `./db/db.pl ${MOLOCH_ELASTICSEARCH} info | grep "DB Version" | cut -d ":" -f2 | tr -d " "` -eq -1 ]]; then
+    if [[ `../db/db.pl ${MOLOCH_ELASTICSEARCH} info | grep "DB Version" | cut -d ":" -f2 | tr -d " "` -eq -1 ]]; then
       echo "elastic connection to ${MOLOCH_ELASTICSEARCH} OK, but database is missing. Please create."
       exit 1
     fi
