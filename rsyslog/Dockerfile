@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -qq -y git build-essential autogen autocon
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV INSTALL_PATH /src
-ENV RSYSLOG 8.39.0
+ENV RSYSLOG 8.1905.0
 ENV LIBFASTJSON 0.99.8
 ENV LIBLOGNORM 2.0.6
 
