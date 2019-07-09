@@ -30,6 +30,7 @@ RUN mkdir -p $working_dir \
 RUN mkdir -p $log_dir && chown -R $user:$group $log_dir
 
 VOLUME $working_dir/contexts
+VOLUME $log_dir
 
 USER $user
 WORKDIR $working_dir
