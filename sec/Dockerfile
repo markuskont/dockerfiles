@@ -23,8 +23,13 @@ COPY --from=Builder /usr/local/lib/perl5/site_perl/5.24.4/JSON.pm /usr/share/per
 
 RUN groupadd -g $gid $user
 RUN useradd -g $gid -l -M -s /bin/false -u $gid -d $working_dir $user
-RUN mkdir $working_dir && chown -R $user:$group $working_dir
-RUN mkdir $log_dir && chown -R $user:$group $log_dir
+RUN mkdir -p $working_dir \
+  && mkdir -p $working_dir/pipes \
+  && mkdir -p $working_dir/contexts \
+  && chown -R $user:$group $working_dir
+RUN mkdir -p $log_dir && chown -R $user:$group $log_dir
+
+VOLUME $working_dir/contexts
 
 USER $user
 WORKDIR $working_dir
