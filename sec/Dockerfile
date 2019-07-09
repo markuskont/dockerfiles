@@ -15,8 +15,8 @@ ENV user=sec
 ENV gid=61000
 ENV working_dir=/var/lib/sec
 
-COPY --from=Builder /app/sec-${version}/sec /usr/local/bin 
-RUN ["cpanm", "JSON"] 
+COPY --from=Builder /app/sec-${version}/sec /usr/local/bin
+RUN ["cpanm", "JSON"]
 
 RUN groupadd -g $gid $user
 RUN useradd -g $gid -l -M -s /bin/false -u $gid $user
