@@ -12,5 +12,5 @@ FROM perl:5.30
 
 ENV version=2.8.2
 
-COPY --from=Builder /app/sec-${version}/sec /usr/bin
-ENTRYPOINT ["/usr/bin/sec"]
+COPY --from=Builder /app/sec-${version}/sec /usr/local/bin
+ENTRYPOINT ["/usr/local/bin/sec"]
