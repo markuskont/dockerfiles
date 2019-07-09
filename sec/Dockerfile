@@ -1,4 +1,4 @@
-FROM perl:5.30 as Builder
+FROM perl:5.24 as Builder
 LABEL maintainer="Markus Kont <alias013@gmail.com>"
 
 ENV version=2.8.2
@@ -8,7 +8,9 @@ WORKDIR /app
 RUN wget https://github.com/simple-evcorr/sec/releases/download/${version}/sec-${version}.tar.gz \
 && tar -xzf sec-${version}.tar.gz 
 
-FROM perl:5.30
+RUN ["cpanm", "JSON"]
+
+FROM perl:5.24
 
 ENV version=2.8.2
 ENV user=sec
@@ -17,12 +19,13 @@ ENV working_dir=/var/lib/sec
 ENV log_dir=/var/log/sec
 
 COPY --from=Builder /app/sec-${version}/sec /usr/local/bin
-RUN ["cpanm", "JSON"]
+COPY --from=Builder /usr/local/lib/perl5/site_perl/5.24.4/JSON.pm /usr/share/perl5/
 
 RUN groupadd -g $gid $user
-RUN useradd -g $gid -l -M -s /bin/false -u $gid $user
+RUN useradd -g $gid -l -M -s /bin/false -u $gid -d $working_dir $user
 RUN mkdir $working_dir && chown -R $user:$group $working_dir
 RUN mkdir $log_dir && chown -R $user:$group $log_dir
+
 USER $user
 WORKDIR $working_dir
 
