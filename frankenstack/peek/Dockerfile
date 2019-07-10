@@ -17,6 +17,7 @@ ENV user=peek
 ENV gid=61000
 ENV working_dir=/var/lib/peek
 
+RUN addgroup -S $gid && adduser --disabled-password -G $gid -H -s /bin/false -u $gid -h $working_dir $user
 RUN mkdir -p $working_dir && chown -R $user:$gid $working_dir
 VOLUME $working_dir
 USER $user
