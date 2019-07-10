@@ -17,4 +17,9 @@ ENV user=peek
 ENV gid=61000
 ENV working_dir=/var/lib/peek
 
+RUN mkdir -p $working_dir && chown -R $user:$gid $working_dir
+VOLUME $working_dir
+USER $user
+WORKDIR $working_dir
+
 ENTRYPOINT ["/usr/local/bin/peek"]
