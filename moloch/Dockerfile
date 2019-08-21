@@ -11,6 +11,7 @@ RUN apt-get update && apt-get -y install sudo git python-minimal python-yaml lib
 
 RUN git clone https://github.com/markuskont/moloch.git \
 && cd moloch \
+&& git checkout custom/dockerize \
 && ./easybutton-build.sh -d /data/moloch
 
 RUN useradd -ms /bin/bash build && usermod -u 1000 build
