@@ -43,7 +43,6 @@ libcap-ng-dev \
 libcap-ng0 \
 libmagic-dev \
 libjansson-dev \
-#libhyperscan-dev \
 libhiredis-dev \
 libluajit-5.1-dev \
 liblz4-dev \
@@ -57,10 +56,9 @@ RUN git clone https://github.com/intel/hyperscan \
 && git checkout tags/v$HYPERSCAN . \
 && cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_STATIC_AND_SHARED=1 && make -j 16 && make install && cd ../ && rm -r hyperscan
 
-RUN git clone https://github.com/OISF/suricata \
+RUN git clone https://github.com/markuskont/suricata \
 && cd suricata \
-#&& git checkout tags/$SURICATA \
-#&& git checkout $SURICATA . \
+&& git checkout custom/dockerize \
 && git clone https://github.com/OISF/libhtp.git \
 && cd libhtp \
 && git checkout tags/$LIBHTP && cd .. \
