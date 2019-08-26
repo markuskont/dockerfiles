@@ -24,6 +24,9 @@ case ${MOLOCH_ENV} in
       sed -i -e "s,# plugins=tagger.so; netflow.so,plugins=${MOLOCH_CAPTURE_PLUGINS},g"                                         $CONFIG
       sed -i -e "s,# viewerPlugins=wise.js,viewerPlugins=wise.js\nwiseTcpTupleLookups=true\nwiseUdpTupleLookups=true\n,g"   $CONFIG
 
+      if [[ -n ${MOLOCH_SURICATA_FILE} ]]; then
+        grep "suricataAlertFile" $CONFIG || sed -i -e "/plugins=${MOLOCH_CAPTURE_PLUGINS}/asuricataAlertFile=${MOLOCH_SURICATA_FILE}" $CONFIG
+      fi
       if [[ -z ${MOLOCH_WISE_PORT} ]]; then
         MOLOCH_WISE_PORT=8081
       fi
