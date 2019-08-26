@@ -12,8 +12,21 @@ case ${MOLOCH_ENV} in
     CONFIG=/data/moloch/etc/config.ini
     if [[ ! -f $CONFIG ]]; then
       cp $CONFIG.sample $CONFIG
-      sed -i "s,dropUser=nobody,dropUser=moloch,g"  $CONFIG
-      sed -i "s,MOLOCH_INSTALL_DIR,/data/moloch,g"  $CONFIG
+
+      MOLOCH_CAPTURE_PLUGINS="wise.so"
+      if [[ ! -z ${MOLOCH_SURICATA_FILE} ]]; then
+        MOLOCH_CAPTURE_PLUGINS+=";suricata.so"
+      fi
+
+      sed -i "s,dropUser=nobody,dropUser=moloch,g"                                    $CONFIG
+      sed -i "s,MOLOCH_INSTALL_DIR,/data/moloch,g"                                    $CONFIG
+
+      sed -i -e "s,# plugins=tagger.so; netflow.so,plugins=${MOLOCH_CAPTURE_PLUGINS},g"                                         $CONFIG
+      sed -i -e "s,# viewerPlugins=wise.js,viewerPlugins=wise.js\nwiseTcpTupleLookups=true\nwiseUdpTupleLookups=true\n,g"   $CONFIG
+
+      if [[ -z ${MOLOCH_WISE_PORT} ]]; then
+        MOLOCH_WISE_PORT=8081
+      fi
       if [[ -z "${MOLOCH_ELASTICSEARCH}" ]]; then
         MOLOCH_ELASTICSEARCH="moloch-elastic:9200"
       fi
@@ -24,7 +37,8 @@ case ${MOLOCH_ENV} in
         MOLOCH_PASSWORD="D0ker1z3dd#"
       fi
       if [[ -n "${MOLOCH_WISE_HOST}" ]]; then
-        sed -i -e "s/#wiseHost=127.0.0.1/wiseHost=${MOLOCH_WISE_HOST}\nwiseCacheSecs=600\nplugins=wise.so\nviewerPlugins=wise.js\nwiseTcpTupleLookups=true\nwiseUdpTupleLookups=true\n/g" $CONFIG
+        sed -i -e "s,#wiseHost=127.0.0.1,wiseHost=${MOLOCH_WISE_HOST}\nwisePort=${MOLOCH_WISE_PORT}\n,g" $CONFIG
+        #sed -i -e "s/#wiseHost=127.0.0.1/wiseHost=${MOLOCH_WISE_HOST}\nwiseCacheSecs=600\nplugins=wise.so\nviewerPlugins=wise.js\nwiseTcpTupleLookups=true\nwiseUdpTupleLookups=true\n/g" $CONFIG
       fi
       if [[ -n "${MOLOCH_PACKET_THREADS}" ]]; then
         sed -i -e "s/packetThreads=2/packetThreads=${MOLOCH_PACKET_THREADS}/g" $CONFIG
