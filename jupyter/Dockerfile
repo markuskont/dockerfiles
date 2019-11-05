@@ -62,7 +62,7 @@ RUN pip install \
   -U -f wheels && rm -rf /wheels && rm -rf /root/.cache/pip
 
 RUN apt-get update \
-  && apt-get install -y libczmq4 \
+  && apt-get install -y libczmq4 git \
   && apt-get -y autoremove \
   && apt-get autoclean \
   && apt-get clean
@@ -83,6 +83,7 @@ RUN mkdir -p ~/.local/bin
 ENV PATH "${home}/.local/bin:${home}/.local/julia/bin:$PATH"
 
 RUN julia -e 'using Pkg; Pkg.add("IJulia");'
+VOLUME $home/.julia/
 
 WORKDIR $work
 
