@@ -45,7 +45,7 @@ FROM python:3.8-buster
 ENV user=jupyter
 ENV uid=61000
 ENV home=/home/$user
-ENV work=/notebooks
+ENV work=/data/
 ENV PASSWORD=jupyter
 
 COPY --from=PyBuilder /wheels /wheels 
@@ -76,7 +76,7 @@ COPY --from=GoBuilder /binaries/gophernotes /usr/bin
 COPY --from=JuliaBuilder /stuff/julia-1.2.0/ $home/.local/julia
 
 RUN chown -R $user /home/$user
-RUN mkdir $work && chown -R $user $work && chown -R $user $home
+RUN mkdir -p $work/notebooks && chown -R $user $work && chown -R $user $home
 USER $user
 RUN mkdir $home/.jupyter
 RUN python3 -c "from notebook.auth.security import set_password; set_password(password=\"${PASSWORD}\")"
@@ -86,8 +86,10 @@ ENV PATH "${home}/.local/bin:${home}/.local/julia/bin:$PATH"
 
 RUN julia -e 'using Pkg; Pkg.add("IJulia");'
 RUN julia -e 'using Pkg; Pkg.add("DataFrames");'
+RUN julia -e 'using Pkg; Pkg.add("JSON");'
+
 VOLUME $home/.julia/
 
-WORKDIR $work
+WORKDIR $work/notebooks
 
 ENTRYPOINT ["jupyter", "lab", "--ip=0.0.0.0"]
