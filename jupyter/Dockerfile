@@ -88,6 +88,7 @@ RUN julia -e 'using Pkg; Pkg.add("IJulia");'
 RUN julia -e 'using Pkg; Pkg.add("DataFrames");'
 RUN julia -e 'using Pkg; Pkg.add("JSON");'
 RUN julia -e 'using Pkg; Pkg.add("HTTP");'
+RUN julia -e 'using Pkg; Pkg.add("Clustering");'
 
 VOLUME $home/.julia/
 
