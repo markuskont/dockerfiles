@@ -46,6 +46,7 @@ ENV user=jupyter
 ENV uid=61000
 ENV home=/home/$user
 ENV work=/notebooks
+ENV PASSWORD=jupyter
 
 COPY --from=PyBuilder /wheels /wheels 
 #RUN apt-get update && apt-get install -y libopenblas-base && apt-get -y autoremove && apt-get autoclean && apt-get clean
@@ -79,6 +80,7 @@ RUN chown -R $user /home/$user
 RUN mkdir $work && chown -R $user $work && chown -R $user $home
 USER $user
 RUN mkdir $home/.jupyter
+RUN python3 -c "from notebook.auth.security import set_password; set_password(password=\"${PASSWORD}\")"
 
 RUN mkdir -p ~/.local/bin
 ENV PATH "${home}/.local/bin:${home}/.local/julia/bin:$PATH"
