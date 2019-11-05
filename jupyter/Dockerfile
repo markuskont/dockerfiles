@@ -67,7 +67,7 @@ RUN apt-get update \
   && apt-get autoclean \
   && apt-get clean
 
-RUN useradd -ms /bin/false -d $home $user && usermod -u $uid $user
+RUN useradd -ms /bin/false -d $home $user && usermod -u $uid -s /bin/bash $user
 
 RUN mkdir -p /home/$user/.local/share/jupyter/kernels/gophernotes
 COPY --from=GoBuilder /build /home/$user/.local/share/jupyter/kernels/gophernotes
@@ -78,13 +78,13 @@ COPY --from=JuliaBuilder /stuff/julia-1.2.0/ $home/.local/julia
 RUN chown -R $user /home/$user
 RUN mkdir $work && chown -R $user $work && chown -R $user $home
 USER $user
+RUN mkdir $home/.jupyter
 
 RUN mkdir -p ~/.local/bin
 ENV PATH "${home}/.local/bin:${home}/.local/julia/bin:$PATH"
 
 RUN julia -e 'using Pkg; Pkg.add("IJulia");'
 VOLUME $home/.julia/
-VOLUME $home/.jupyter/
 
 WORKDIR $work
 
