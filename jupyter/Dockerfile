@@ -76,7 +76,7 @@ COPY --from=GoBuilder /binaries/gophernotes /usr/bin
 COPY --from=JuliaBuilder /stuff/julia-1.2.0/ $home/.local/julia
 
 RUN chown -R $user /home/$user
-RUN mkdir $work && chown -R $user $work
+RUN mkdir $work && chown -R $user $work && chown -R $user $home
 USER $user
 
 RUN mkdir -p ~/.local/bin
