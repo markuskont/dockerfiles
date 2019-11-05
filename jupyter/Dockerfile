@@ -49,7 +49,6 @@ ENV work=/notebooks
 ENV PASSWORD=jupyter
 
 COPY --from=PyBuilder /wheels /wheels 
-#RUN apt-get update && apt-get install -y libopenblas-base && apt-get -y autoremove && apt-get autoclean && apt-get clean
 RUN pip install \
   jupyter \
   jupyterlab \
