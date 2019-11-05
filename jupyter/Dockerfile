@@ -84,6 +84,7 @@ ENV PATH "${home}/.local/bin:${home}/.local/julia/bin:$PATH"
 
 RUN julia -e 'using Pkg; Pkg.add("IJulia");'
 VOLUME $home/.julia/
+VOLUME $home/.jupyter/
 
 WORKDIR $work
 
