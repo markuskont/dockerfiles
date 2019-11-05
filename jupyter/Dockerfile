@@ -87,6 +87,7 @@ ENV PATH "${home}/.local/bin:${home}/.local/julia/bin:$PATH"
 RUN julia -e 'using Pkg; Pkg.add("IJulia");'
 RUN julia -e 'using Pkg; Pkg.add("DataFrames");'
 RUN julia -e 'using Pkg; Pkg.add("JSON");'
+RUN julia -e 'using Pkg; Pkg.add("HTTP");'
 
 VOLUME $home/.julia/
 
