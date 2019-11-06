@@ -79,6 +79,7 @@ RUN chown -R $user /home/$user
 RUN mkdir -p $work/notebooks && chown -R $user $work && chown -R $user $home
 USER $user
 RUN mkdir $home/.jupyter
+COPY jupyter_notebook_config.py $home/.jupyter/jupyter_notebook_config.py
 RUN python3 -c "from notebook.auth.security import set_password; set_password(password=\"${PASSWORD}\")"
 
 RUN mkdir -p ~/.local/bin
