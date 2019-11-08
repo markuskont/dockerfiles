@@ -22,6 +22,7 @@ RUN pip wheel \
   kafka \
   redis \
   matplotlib \
+  graphviz \
   cassandra-driver
 
 FROM golang:1.13-buster AS GoBuilder
@@ -59,10 +60,11 @@ RUN pip install \
   redis \
   matplotlib \
   cassandra-driver \
+  graphviz \
   -U -f wheels && rm -rf /wheels && rm -rf /root/.cache/pip
 
 RUN apt-get update \
-  && apt-get install -y libczmq4 git \
+  && apt-get install -y libczmq4 git graphviz \
   && apt-get -y autoremove \
   && apt-get autoclean \
   && apt-get clean
