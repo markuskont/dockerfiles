@@ -103,5 +103,6 @@ RUN julia -e 'using Pkg; Pkg.add("Plots");'
 VOLUME $home/.julia/
 
 WORKDIR $work/notebooks
+RUN jupyter labextension install @rahlir/theme-gruvbox
 
 ENTRYPOINT ["jupyter", "lab", "--ip=0.0.0.0"]
