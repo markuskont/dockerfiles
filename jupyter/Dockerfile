@@ -23,7 +23,10 @@ RUN pip wheel \
   redis \
   matplotlib \
   graphviz \
-  cassandra-driver
+  requests \
+  SQLAlchemy \
+  mysqlclient \
+  mysql-connector
 
 FROM golang:1.13-buster AS GoBuilder
 
@@ -59,8 +62,11 @@ RUN pip install \
   kafka \
   redis \
   matplotlib \
-  cassandra-driver \
   graphviz \
+  requests \
+  SQLAlchemy \
+  mysqlclient \
+  mysql-connector \
   -U -f wheels && rm -rf /wheels && rm -rf /root/.cache/pip
 
 RUN apt-get update \
