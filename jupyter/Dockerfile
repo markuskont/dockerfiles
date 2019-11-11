@@ -70,7 +70,7 @@ RUN pip install \
   -U -f wheels && rm -rf /wheels && rm -rf /root/.cache/pip
 
 RUN apt-get update \
-  && apt-get install -y libczmq4 git graphviz \
+  && apt-get install -y libczmq4 git graphviz nodejs npm \
   && apt-get -y autoremove \
   && apt-get autoclean \
   && apt-get clean
@@ -85,6 +85,8 @@ COPY --from=JuliaBuilder /stuff/julia-1.2.0/ $home/.local/julia
 
 RUN chown -R $user /home/$user
 RUN mkdir -p $work/notebooks $work/dump $work/pickles && chown -R $user $work && chown -R $user $home
+RUN jupyter labextension install @rahlir/theme-gruvbox
+
 USER $user
 RUN mkdir $home/.jupyter
 COPY jupyter_notebook_config.py $home/.jupyter/jupyter_notebook_config.py
@@ -103,6 +105,5 @@ RUN julia -e 'using Pkg; Pkg.add("Plots");'
 VOLUME $home/.julia/
 
 WORKDIR $work/notebooks
-RUN jupyter labextension install @rahlir/theme-gruvbox
 
 ENTRYPOINT ["jupyter", "lab", "--ip=0.0.0.0"]
