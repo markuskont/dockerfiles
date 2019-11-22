@@ -23,7 +23,10 @@ RUN pip wheel \
   redis \
   matplotlib \
   graphviz \
-  cassandra-driver
+  requests \
+  SQLAlchemy \
+  mysqlclient \
+  mysql-connector
 
 FROM golang:1.13-buster AS GoBuilder
 
@@ -59,12 +62,15 @@ RUN pip install \
   kafka \
   redis \
   matplotlib \
-  cassandra-driver \
   graphviz \
+  requests \
+  SQLAlchemy \
+  mysqlclient \
+  mysql-connector \
   -U -f wheels && rm -rf /wheels && rm -rf /root/.cache/pip
 
 RUN apt-get update \
-  && apt-get install -y libczmq4 git graphviz \
+  && apt-get install -y libczmq4 git graphviz nodejs npm \
   && apt-get -y autoremove \
   && apt-get autoclean \
   && apt-get clean
@@ -78,7 +84,9 @@ COPY --from=GoBuilder /binaries/gophernotes /usr/bin
 COPY --from=JuliaBuilder /stuff/julia-1.2.0/ $home/.local/julia
 
 RUN chown -R $user /home/$user
-RUN mkdir -p $work/notebooks && chown -R $user $work && chown -R $user $home
+RUN mkdir -p $work/notebooks $work/dump $work/pickles && chown -R $user $work && chown -R $user $home
+RUN jupyter labextension install @rahlir/theme-gruvbox
+
 USER $user
 RUN mkdir $home/.jupyter
 COPY jupyter_notebook_config.py $home/.jupyter/jupyter_notebook_config.py
