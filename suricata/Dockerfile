@@ -66,7 +66,7 @@ RUN git clone https://github.com/markuskont/suricata \
 && ./configure \
 --prefix=/opt/suricata \
 --sysconfdir=/etc \
---localstatedir=/opt/suricata/var \
+--localstatedir=/var/run/suricata \
 --enable-hiredis \
 --enable-luajit \
 --enable-python \
@@ -95,6 +95,10 @@ libnss3 \
 && apt-get -y autoremove && apt-get -y autoclean && apt-get clean
 
 COPY --from=Builder /opt/suricata /opt/suricata
+RUN mkdir /etc/suricata
+COPY ./reference.config /etc/suricata/reference.config
+COPY ./threshold.config /etc/suricata/threshold.config
+COPY ./classification.config /etc/suricata/classification.config
 
 ENV PATH "$PATH:/opt/suricata/bin"
 ENTRYPOINT ["/opt/suricata/bin/suricata"]
