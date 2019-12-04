@@ -24,8 +24,7 @@ sudo \
 rustc \
 cargo \
 cmake \
-ragel \
-&& apt-get -y autoremove && apt-get -y autoclean && apt-get clean
+ragel
 
 RUN apt-get update \
 && apt-get -qq -y install \
@@ -50,8 +49,7 @@ libnss3-dev \
 libnspr4-dev \
 liblzma-dev \
 libhyperscan-dev \
-libhyperscan5 \
-&& apt-get -y autoremove && apt-get -y autoclean && apt-get clean
+libhyperscan5
 
 #RUN git clone https://github.com/intel/hyperscan \
 #&& cd hyperscan \
@@ -74,8 +72,7 @@ RUN git clone https://github.com/markuskont/suricata \
 --enable-python \
 --enable-rust \
 --enable-rust-experimental \
-&& make -j 16 && make install \
-&& cd ../ && rm -r suricata && mkdir -p /opt/surcata/var/log/suricata
+&& make -j 16 && make install
 
 FROM debian:buster
 USER root

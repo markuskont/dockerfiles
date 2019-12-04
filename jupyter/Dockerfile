@@ -26,7 +26,8 @@ RUN pip wheel \
   requests \
   SQLAlchemy \
   mysqlclient \
-  mysql-connector
+  mysql-connector \
+  pyyaml
 
 FROM golang:1.13-buster AS GoBuilder
 
@@ -67,6 +68,7 @@ RUN pip install \
   SQLAlchemy \
   mysqlclient \
   mysql-connector \
+  pyyaml \
   -U -f wheels && rm -rf /wheels && rm -rf /root/.cache/pip
 
 RUN apt-get update \
