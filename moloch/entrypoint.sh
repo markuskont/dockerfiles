@@ -75,9 +75,17 @@ case ${MOLOCH_ENV} in
       exit 1
     fi
     if [[ `./db/db.pl ${MOLOCH_ELASTICSEARCH} info | grep "DB Version" | cut -d ":" -f2 | tr -d " "` -eq -1 ]]; then
-      echo "INIT" | ./db/db.pl ${MOLOCH_ELASTICSEARCH} init
+      if [[ -z "${MOLOCH_DB_SHARDS}" ]]; then
+        MOLOCH_DB_SHARDS="3"
+      fi
+      if [[ -z "${MOLOCH_DB_REPLICAS}" ]]; then
+        MOLOCH_DB_REPLICAS="0"
+      fi
+      if [[ -z "${MOLOCH_DB_SHARDS_PER_NODE}" ]]; then
+        MOLOCH_DB_SHARDS_PER_NODE="null"
+      fi
+      echo "INIT" | ./db/db.pl ${MOLOCH_ELASTICSEARCH} init --shards ${MOLOCH_DB_SHARDS} --replicas ${MOLOCH_DB_REPLICAS} --shardsPerNode ${MOLOCH_DB_SHARDS_PER_NODE}
     fi
-    #ethtool -K ${MOLOCH_INTERFACE} tx off sg off gro off gso off lro off tso off
     moloch-capture -c $CONFIG $@
     ;;
   "VIEWER" )
