@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y \
   wget \
   libopenblas-base \
   libopenblas-dev \
-  liblapack-dev
+  liblapack-dev \
+  libsnappy-dev 
 
 WORKDIR /wheels
 RUN pip wheel \
@@ -19,7 +20,8 @@ RUN pip wheel \
   pandas \
   numpy \
   elasticsearch \
-  kafka \
+  kafka-python \
+  python-snappy \
   redis \
   matplotlib \
   graphviz \
@@ -42,8 +44,8 @@ FROM debian:buster AS JuliaBuilder
 RUN apt-get update && apt-get install -y wget
 RUN mkdir /stuff
 WORKDIR /stuff
-RUN wget https://julialang-s3.julialang.org/bin/linux/x64/1.2/julia-1.2.0-linux-x86_64.tar.gz
-RUN tar -xzf julia-1.2.0-linux-x86_64.tar.gz
+RUN wget https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.3.0-linux-x86_64.tar.gz
+RUN tar -xzf julia-1.3.0-linux-x86_64.tar.gz
 
 FROM python:3.8-buster
 
@@ -60,7 +62,8 @@ RUN pip install \
   pandas \
   numpy \
   elasticsearch \
-  kafka \
+  kafka-python \
+  python-snappy \
   redis \
   matplotlib \
   graphviz \
@@ -83,7 +86,7 @@ RUN mkdir -p /home/$user/.local/share/jupyter/kernels/gophernotes
 COPY --from=GoBuilder /build /home/$user/.local/share/jupyter/kernels/gophernotes
 COPY --from=GoBuilder /binaries/gophernotes /usr/bin
 
-COPY --from=JuliaBuilder /stuff/julia-1.2.0/ $home/.local/julia
+COPY --from=JuliaBuilder /stuff/julia-1.3.0/ $home/.local/julia
 
 RUN chown -R $user /home/$user
 RUN mkdir -p $work/notebooks $work/dump $work/pickles && chown -R $user $work && chown -R $user $home
