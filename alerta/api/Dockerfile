@@ -13,6 +13,7 @@ RUN chown alerta /var/alerta/run
 
 COPY wsgi.py /var/alerta/wsgi.py
 COPY uwsgi.ini /etc/uwsgi.ini
-CMD touch /etc/alertad.conf && chown alerta /etc/alertad.conf
+COPY alertad.conf /etc/alertad.conf
+RUN chown alerta /etc/alertad.conf
 
 CMD chown -R alerta /var/alerta/ && uwsgi --ini /etc/uwsgi.ini
