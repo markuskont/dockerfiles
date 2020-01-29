@@ -1,0 +1,28 @@
+version: '3.6'
+
+services:
+
+  scirius-backend:
+    image: markuskont/scirius-backend
+    build: backend/
+
+    volumes:
+      - scirius-sockets:/var/run/scirius
+      - scirius-static:/opt/scirius/static
+    environment:
+      EXPOSE: 192.168.10.11
+
+  scirius-proxy:
+    image: markuskont/scirius-proxy
+    build: proxy/
+    volumes:
+      - scirius-sockets:/var/run/scirius
+      - scirius-static:/opt/scirius/static
+    ports:
+      - 8000:80
+
+volumes:
+  scirius-sockets:
+    driver: local
+  scirius-static:
+    driver: local
