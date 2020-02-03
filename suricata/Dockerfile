@@ -3,7 +3,7 @@ LABEL maintainer="Markus Kont <alias013@gmail.com>"
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV INSTALL_PATH /src
-ENV LIBHTP  0.5.31
+ENV LIBHTP  0.5.32
 ENV HYPERSCAN 5.1.1
 
 RUN mkdir -p $INSTALL_PATH
@@ -21,8 +21,6 @@ pkg-config \
 python \
 curl \
 sudo \
-rustc \
-cargo \
 cmake \
 ragel
 
@@ -51,19 +49,18 @@ liblzma-dev \
 libhyperscan-dev \
 libhyperscan5
 
-#RUN git clone https://github.com/intel/hyperscan \
-#&& cd hyperscan \
-#&& git checkout tags/v$HYPERSCAN . \
-#&& cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_STATIC_AND_SHARED=1 && make -j 16 && make install && cd ../ && rm -r hyperscan
+RUN curl $CURL_OTPS --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s - -y
+ENV PATH "/root/.cargo/bin:$PATH"
+RUN cargo install --force cbindgen
 
-RUN git clone https://github.com/markuskont/suricata \
-&& cd suricata \
-&& git checkout custom/dockerize \
+RUN git clone https://github.com/markuskont/suricata
+WORKDIR /${INSTALL_PATH}/suricata/
+RUN git checkout custom/dockerize \
 && git clone https://github.com/OISF/libhtp.git \
 && cd libhtp \
-&& git checkout tags/$LIBHTP && cd .. \
-&& ./autogen.sh \
-&& ./configure \
+&& git checkout tags/$LIBHTP && cd ..
+RUN ./autogen.sh 
+RUN ./configure \
 --prefix=/opt/suricata \
 --sysconfdir=/etc \
 --localstatedir=/var/run/suricata \
@@ -71,8 +68,9 @@ RUN git clone https://github.com/markuskont/suricata \
 --enable-luajit \
 --enable-python \
 --enable-rust \
---enable-rust-experimental \
-&& make -j 16 && make install
+--enable-rust-experimental
+RUN make -j 16 
+RUN make install
 
 FROM debian:buster
 USER root
