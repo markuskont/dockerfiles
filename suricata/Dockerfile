@@ -19,6 +19,7 @@ autoconf \
 libtool \
 pkg-config \
 python \
+python3 \
 curl \
 sudo \
 cmake \
@@ -63,7 +64,7 @@ RUN ./autogen.sh
 RUN ./configure \
 --prefix=/opt/suricata \
 --sysconfdir=/etc \
---localstatedir=/var/run/suricata \
+--localstatedir=/var \
 --enable-hiredis \
 --enable-luajit \
 --enable-python \
@@ -90,6 +91,7 @@ libpcap0.8 \
 libnet1 \
 libjansson4 \
 libnss3 \
+python3 \
 && apt-get -y autoremove && apt-get -y autoclean && apt-get clean
 
 COPY --from=Builder /opt/suricata /opt/suricata
