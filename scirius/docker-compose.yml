@@ -13,6 +13,7 @@ services:
     environment:
       ELASTICSEARCH_ADDRESS: ${ELASTICSEARCH_ADDRESS}
       ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      SURICATA_UNIX_SOCKET: ${SURICATA_UNIX_SOCKET}
 
   scirius-proxy:
     image: markuskont/scirius-proxy
