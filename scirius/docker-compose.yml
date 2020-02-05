@@ -10,7 +10,8 @@ services:
       - scirius-sockets:/var/run/scirius
       - scirius-static:/opt/scirius/static
     environment:
-      EXPOSE: 192.168.10.11
+      ELASTICSEARCH_ADDRESS: ${ELASTICSEARCH_ADDRESS}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
 
   scirius-proxy:
     image: markuskont/scirius-proxy

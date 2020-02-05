@@ -30,12 +30,13 @@ RUN apt-get update && apt-get install -y python-pip sqlite3 git && apt-get -y au
 RUN mkdir -p /var/log/scirius && mkdir /var/run/scirius
 RUN echo "from django.contrib.auth.models import User; User.objects.create_superuser('vagrant', 'vagrant@localhost', 'vagrant')" | python manage.py shell
 COPY entrypoint.sh /bin/entrypoint.sh
+COPY local_settings.py /opt/scirius/scirius/local_settings.py
 RUN chmod 755 /bin/entrypoint.sh
 
 ENV user=scirius
 ENV uid=61000
 ENV home=/opt/scirius
-RUN useradd -ms /bin/false $user && usermod -d $home $user && chown -R $user $home && chown -R $user /var/log/scirius && chown -R $user /var/run/scirius
+RUN useradd -ms /bin/false $user && usermod -d $home $user && chown -R $user $home/ && chown -R $user /var/log/scirius && chown -R $user /var/run/scirius
 USER $user
 WORKDIR $home
 VOLUME [ "/opt/scirius/static" ]
