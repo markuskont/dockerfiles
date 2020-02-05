@@ -5,6 +5,7 @@ services:
   scirius-backend:
     image: markuskont/scirius-backend
     build: backend/
+    #hostname: CDMCS
 
     volumes:
       - scirius-sockets:/var/run/scirius
