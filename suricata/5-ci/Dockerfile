@@ -23,7 +23,10 @@ python3 \
 curl \
 sudo \
 cmake \
-ragel
+ragel \
+rustc \
+cargo \
+cbindgen
 
 RUN apt-get update \
 && apt-get -qq -y install \
@@ -50,9 +53,9 @@ liblzma-dev \
 libhyperscan-dev \
 libhyperscan5
 
-RUN curl $CURL_OTPS --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s - -y
-ENV PATH "/root/.cargo/bin:$PATH"
-RUN cargo install --force cbindgen
+#RUN curl $CURL_OTPS --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s - -y
+#ENV PATH "/root/.cargo/bin:$PATH"
+#RUN cargo install --force cbindgen
 
 RUN git clone https://github.com/oisf/suricata
 WORKDIR /${INSTALL_PATH}/suricata/
@@ -66,10 +69,8 @@ RUN ./configure \
 --sysconfdir=/etc \
 --localstatedir=/var \
 --enable-hiredis \
---enable-luajit \
---enable-python \
---enable-rust \
---enable-rust-experimental
+--enable-python
+
 RUN make -j 16 
 RUN make install
 RUN make install-conf
