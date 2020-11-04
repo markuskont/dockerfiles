@@ -1,19 +1,19 @@
 FROM debian:stretch
-LABEL maintainer="Markus Kont <markus.kont@ccdcoe.org>"
+LABEL maintainer="Markus Kont <alias013@gmail.com>"
 
 RUN apt-get update && apt-get install -qq -y git build-essential autogen autoconf libtool pkg-config python-docutils flex bison libgrok1 librdkafka1 libestr-dev zlib1g-dev uuid-dev libsystemd-dev libgcrypt20-dev liblogging-stdlog-dev libcurl4-gnutls-dev librdkafka-dev libgrok-dev libpcre3-dev libtokyocabinet-dev libglib2.0-dev gnutls-dev libestr-dev && apt-get -y autoremove && apt-get -y autoclean && apt-get clean
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV INSTALL_PATH /src
-ENV RSYSLOG 8.1911.0
-ENV LIBFASTJSON 0.99.8
-ENV LIBLOGNORM 2.0.6
+ENV RSYSLOG v8.2010.0
+ENV LIBFASTJSON v0.99.8
+ENV LIBLOGNORM v2.0.6
 
 RUN mkdir -p $INSTALL_PATH
 
 RUN git clone https://github.com/rsyslog/libfastjson.git \
 && cd libfastjson \
-&& git checkout tags/v$LIBFASTJSON \
+&& git checkout tags/$LIBFASTJSON \
 && sh autogen.sh \
 && ./configure \
 && make \
@@ -22,7 +22,7 @@ RUN git clone https://github.com/rsyslog/libfastjson.git \
 
 RUN git clone https://github.com/rsyslog/liblognorm.git \
 && cd liblognorm \
-&& git checkout tags/v$LIBLOGNORM \
+&& git checkout tags/$LIBLOGNORM \
 && autoreconf --install \
 && ./configure \
 && make \
@@ -32,7 +32,7 @@ RUN git clone https://github.com/rsyslog/liblognorm.git \
 WORKDIR $INSTALL_PATH
 RUN git clone https://github.com/rsyslog/rsyslog/ \
 && cd rsyslog \
-&& git checkout tags/v$RSYSLOG \
+&& git checkout tags/$RSYSLOG \
 && ./autogen.sh \
 && ./configure \
 --enable-elasticsearch \
