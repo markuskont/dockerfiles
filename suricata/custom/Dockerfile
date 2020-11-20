@@ -3,8 +3,10 @@ LABEL maintainer="Markus Kont <alias013@gmail.com>"
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV INSTALL_PATH /src
-ENV LIBHTP  0.5.32
+ENV LIBHTP  0.5.35
 ENV HYPERSCAN 5.1.1
+
+ARG CORES=4
 
 RUN mkdir -p $INSTALL_PATH
 
@@ -63,6 +65,8 @@ RUN git checkout custom/dockerize \
 RUN ./autogen.sh 
 RUN ./configure \
 --prefix=/opt/suricata \
+--disable-gccmarch-native \
+--disable-shared \
 --sysconfdir=/etc \
 --localstatedir=/var \
 --enable-hiredis \
@@ -70,7 +74,7 @@ RUN ./configure \
 --enable-python \
 --enable-rust \
 --enable-rust-experimental
-RUN make -j 16 
+RUN make -j "${CORES}"
 RUN make install
 
 FROM debian:buster
