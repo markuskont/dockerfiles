@@ -1,4 +1,2 @@
-try:
-    from alerta import app
-except ImportError:
-    from alerta.app import app
+from alerta import create_app
+app = create_app()
