@@ -1,0 +1,94 @@
+version: '3.8'
+
+volumes:
+  arkime_pcap:
+  arkime_elastic_data:
+
+networks:
+  network:
+
+services:
+  elasticsearch:
+    container_name: elasticsearch
+    image: elastic/elasticsearch:${ELK_VERSION:-7.16.1}
+    restart: ${RESTART_MODE:-unless-stopped}
+    healthcheck:
+      test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.ml.enabled=${ML_ENABLED:-true}
+      - ingest.geoip.downloader.enabled=false
+      - "ES_JAVA_OPTS=-Xms4g -Xmx4g"
+    volumes:
+      - ${ELASTIC_DATAPATH:-arkime_elastic_data}:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    networks:
+      network:
+    ports:
+      - 127.0.0.1:9200:9200
+
+  capture:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: markuskont/arkime
+    restart: ${RESTART_MODE:-no}
+    volumes:
+      - arkime_pcap:${ARKIME_DIR:-/opt/arkime}/raw
+    environment:
+      - ARKIME_ENV=CAPTURE
+      # must be localhost as capture must run on host network
+      - ARKIME_ELASTICSEARCH=127.0.0.1:9200
+      - ARKIME_INTERFACE=${ARKIME_INTERFACE:-eth0}
+      - ARKIME_DB_SHARDS=1
+      # workaround for libvirt lab setup
+      - ARKIME_WISE_HOST=127.0.0.1
+    network_mode: "host"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      wise:
+        condition: service_started
+
+  wise:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: markuskont/arkime
+    restart: ${RESTART_MODE:-no}
+    environment:
+      - ARKIME_ENV=WISE
+    ports:
+      - 8081:8081
+    networks:
+      network:
+
+  viewer:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: markuskont/arkime
+    restart: ${RESTART_MODE:-no}
+    environment:
+      - ARKIME_ENV=VIEWER
+      - ARKIME_WISE_HOST=wise
+      - ARKIME_ELASTICSEARCH=http://elasticsearch:9200
+    depends_on:
+      capture:
+        condition: service_started
+      elasticsearch:
+        condition: service_healthy
+      wise:
+        condition: service_started
+    ports:
+      - 8005:8005
+    networks:
+      network:
