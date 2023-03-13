@@ -66,6 +66,7 @@ services:
     restart: ${RESTART_MODE:-no}
     environment:
       - ARKIME_ENV=WISE
+      - ARKIME_ELASTICSEARCH=http://elasticsearch:9200
     ports:
       - 8081:8081
     networks:

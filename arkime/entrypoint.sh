@@ -6,6 +6,7 @@ case ${ARKIME_ENV} in
     if [[ ! -f $CONFIG ]]; then
       echo "creating wise config file"
       cp $CONFIG.sample $CONFIG
+      sed -i "s|# usersElasticsearch=ARKIME_ELASTICSEARCH| usersElasticsearch=${ARKIME_ELASTICSEARCH:-localhost:9200}|g" $CONFIG
     fi
     ;;
   *)
