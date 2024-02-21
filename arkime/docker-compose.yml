@@ -74,11 +74,14 @@ services:
       network:
 
   viewer:
+    hostname: ${HOSTNAME:-arkime}
     build:
       context: .
       dockerfile: ./Dockerfile
     image: markuskont/arkime
     restart: ${RESTART_MODE:-no}
+    volumes:
+      - arkime_pcap:${ARKIME_DIR:-/opt/arkime}/raw
     environment:
       - ARKIME_ENV=VIEWER
       - ARKIME_WISE_HOST=wise
