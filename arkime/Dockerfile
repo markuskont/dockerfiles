@@ -18,8 +18,7 @@ RUN apt-get update && apt-get -y install \
   ethtool \
   && apt-get -y autoremove && apt-get autoclean && apt-get clean
 
-RUN wget -O /root/arkime.deb https://s3.amazonaws.com/files.molo.ch/builds/ubuntu-22.04/arkime_4.2.0-1_amd64.deb
-#RUN wget -O /root/arkime.deb https://s3.amazonaws.com/files.molo.ch/arkime-main_ubuntu20_amd64.deb
+RUN wget -O /root/arkime.deb https://github.com/arkime/arkime/releases/download/v5.0.1/arkime_5.0.1-1.ubuntu2204_amd64.deb
 RUN dpkg -i /root/arkime.deb || apt-get install -f -y
 
 ENV PATH "$PATH:$ARKIME_DIR/bin"
