@@ -10,7 +10,7 @@ networks:
 services:
   elasticsearch:
     container_name: elasticsearch
-    image: elastic/elasticsearch:${ELK_VERSION:-7.16.1}
+    image: elastic/elasticsearch:${ELK_VERSION:-8.12.1}
     restart: ${RESTART_MODE:-unless-stopped}
     healthcheck:
       test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1"]
@@ -21,6 +21,7 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
       - xpack.ml.enabled=${ML_ENABLED:-true}
       - ingest.geoip.downloader.enabled=false
       - "ES_JAVA_OPTS=-Xms4g -Xmx4g"
